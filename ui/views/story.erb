@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title> <%= story.upcase %></title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+<nav>
+  <div class="nav-wrapper teal">
+    <a href="#" class="brand-logo center"> <%= story.upcase %> Certification</a>
+  </div>
+</nav>
+
+<div class="card">
+  <div class="card-content black-text">
+    <span class="card-title">Narrative</span>
+    <p>
+      <% require 'httparty'
+         response = HTTParty.get("http://gold_seal_api:8080/projects/#{project}/#{story}")
+         @details = JSON.parse response.body
+      %>
+      <%= @details['narrative'] %>
+    </p>
+    <br>
+    <span class="card-title">Acceptance Criteria</span>
+    <ul class="collection">
+      <% @details['acceptance_criteria'].each do | criteria | %>
+        <li class="collection-item"><%= criteria %></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
+<div>
+
+</div>
+
+</body>
+</html>

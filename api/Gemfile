@@ -1,0 +1,8 @@
+source "https://rubygems.org" do
+  gem 'bigdecimal'
+  gem 'httparty'
+  gem 'json'
+  gem 'puma'
+  gem 'require_all'
+  gem 'sinatra'
+end
