@@ -35,3 +35,11 @@ post '/stories/:key' do
   Dir.mkdir("projects/#{params[:key].sub(/-.*$/,'')}") unless File.exists?("projects/#{params[:key].sub(/-.*$/,'')}")
   File.write("projects/#{params[:key].sub(/-.*$/,'')}/#{params[:key]}.json", ProcessStory.new(params[:key], credentials).to_golden_story)
 end
+
+post '/testresults/:key' do
+  request.body.rewind
+  Dir.mkdir('projects') unless File.exists?('projects')
+  Dir.mkdir("projects/#{params[:key].sub(/-.*$/,'')}") unless File.exists?("projects/#{params[:key].sub(/-.*$/,'')}")
+  Dir.mkdir("projects/#{params[:key].sub(/-.*$/,'')}/test_results") unless File.exists?("projects/#{params[:key].sub(/-.*$/,'')}/test_results")
+  File.write("projects/#{params[:key].sub(/-.*$/,'')}/test_results/#{params[:key]}.json", request.body.read)
+end

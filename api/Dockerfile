@@ -10,7 +10,7 @@ LABEL bundler="1.17.2"
 RUN apk update
 RUN apk add ruby=2.5.8-r0
 RUN apk add ruby-dev make gcc libc-dev g++ ruby-etc
-RUN gem install bundler -v 1.17.2 --no-ri --no-rdoc
+RUN gem install bundler -v 2.1.4 --no-ri --no-rdoc
 
 RUN mkdir /apis
 WORKDIR /apis
