@@ -10,6 +10,7 @@ set :bind, '0.0.0.0'
 get '/' do
 
 end
+
 get '/projects' do
   content_type :json
   projects = Dir.chdir('projects') do Dir.glob('*').select { | f | File.directory? f } end
@@ -28,12 +29,26 @@ get '/projects/:project/:story' do
   story.to_json
 end
 
+get '/projects/:project/:story/test_results' do
+  content_type :json
+  test_results = JSON.parse (File.read("projects/#{params[:project]}/test_results/#{params[:story]}.json"))
+  test_results.to_json
+end
+
 post '/stories/:key' do
   request.body.rewind
   credentials = JSON.parse request.body.read
   Dir.mkdir('projects') unless File.exists?('projects')
   Dir.mkdir("projects/#{params[:key].sub(/-.*$/,'')}") unless File.exists?("projects/#{params[:key].sub(/-.*$/,'')}")
   File.write("projects/#{params[:key].sub(/-.*$/,'')}/#{params[:key]}.json", ProcessStory.new(params[:key], credentials).to_golden_story)
+end
+
+post '/testresults/:key' do
+  request.body.rewind
+  Dir.mkdir('projects') unless File.exists?('projects')
+  Dir.mkdir("projects/#{params[:key].sub(/-.*$/,'')}") unless File.exists?("projects/#{params[:key].sub(/-.*$/,'')}")
+  Dir.mkdir("projects/#{params[:key].sub(/-.*$/,'')}/test_results") unless File.exists?("projects/#{params[:key].sub(/-.*$/,'')}/test_results")
+  File.write("projects/#{params[:key].sub(/-.*$/,'')}/test_results/#{params[:key]}.json", request.body.read)
 end
 
 post '/testresults/:key' do
