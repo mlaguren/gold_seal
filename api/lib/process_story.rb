@@ -47,16 +47,31 @@ class ProcessStory
     @description.each_line do | line|
       if (line.strip.start_with? "* I should")
         criteria << line.delete_prefix(' *')
-        puts criteria
       end
     end
     return criteria
+  end
+
+  def color_severity(severity)
+    if severity == "LOW"
+      severity.prepend('<a class="yellow waves-effect waves-light btn-small">')
+      severity.concat('</a>')
+    elsif severity == "MEDIUM"
+      severity.prepend('<a class="orange waves-effect waves-light btn-small">')
+      severity.concat('</a>')
+    elsif severity == "HIGH"
+      severity.prepend('<a class="red waves-effect waves-light btn-small">')
+      severity.concat('</a>')
+    else
+
+    end
   end
 
   def table_row_processor(row, pre,post,delimiter)
     temporary = row.split(delimiter)
     temporary.shift
     temporary.pop
+    temporary.map { |x| color_severity(x)}
     temporary.map { |x| x.concat(post)}
     temporary.map { |x| x.prepend(pre)}
     temporary.reduce(:+)
