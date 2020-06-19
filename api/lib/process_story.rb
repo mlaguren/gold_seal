@@ -17,6 +17,9 @@ class ProcessStory
     @key = key
     @summary = @json['issues'][0]['fields']['summary']
     @description = @json['issues'][0]['fields']['description']
+    if @description.nil?
+      @description = ""
+    end
   end
 
   def to_golden_story
