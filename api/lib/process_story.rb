@@ -37,6 +37,12 @@ class ProcessStory
     @description.each_line do | line|
       if (line.strip.start_with? "As a") || (line.strip.start_with? "I would") || (line.strip.start_with? "So that")
         narrative << line
+      elsif (line.strip.start_with? "*As a") || (line.strip.start_with? "*I would") || (line.strip.start_with? "*So that")
+        narrative << line.delete!('*')
+      elsif (line.strip.start_with? "_As a") || (line.strip.start_with? "_I would") || (line.strip.start_with? "_So that")
+        narrative << line.delete!('_')
+      elsif (line.strip.start_with? "+As a") || (line.strip.start_with? "+I would") || (line.strip.start_with? "+So that")
+        narrative << line.delete!('+')
       end
     end
     return narrative
@@ -46,7 +52,13 @@ class ProcessStory
     criteria=[]
     @description.each_line do | line|
       if (line.strip.start_with? "* I should")
-        criteria << line.delete_prefix(' *')
+        criteria << line.delete!('*')
+      elsif (line.strip.start_with? "* *I should")
+          criteria << line.delete!('*')
+      elsif (line.strip.start_with? "* _I should")
+        criteria << line.delete_prefix(' *').delete!('_')
+      elsif (line.strip.start_with? "* +I should")
+        criteria << line.delete_prefix(' *').delete!('+')
       end
     end
     return criteria
