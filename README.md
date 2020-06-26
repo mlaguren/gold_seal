@@ -18,7 +18,8 @@ Optional
 
   In the api folder, create a config.env file that contains the following line:
   
-  JIRA=BASE_URL
+  JIRA=BASE_URL<br>
+  CONFLUENCE=www.someurl (do not include https:// or the path)
   
   where BASE_URL is the url of your JIRA before the /rest/api/latest/
 # To Run

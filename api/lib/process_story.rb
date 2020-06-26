@@ -91,6 +91,7 @@ class ProcessStory
 
   def risk_analysis
     risk = []
+    project = @key[/(\D.*)-/,1]
     @description.each_line do | line|
       if (line.strip.start_with? "|")
         risk << line.delete_prefix(' *')
@@ -101,10 +102,12 @@ class ProcessStory
       if (row.strip.start_with? "||")
         rows << table_row_processor(row, "<th>","</th>","||")
       else
-        rows << table_row_processor(row, "<td>","</td>","|")
+        unlinked_table_row = table_row_processor(row, "<td>","</td>","|")
+        add_wiki_pages = unlinked_table_row.gsub(/\[(https:\/\/#{ENV['CONFLUENCE']}.*)\]/, "<a href=\\1>\\1</a>")
+        rows << add_wiki_pages.gsub(/<td>(#{project}-.*)<\/td>/, "<td><a href='https://projects.mbww.com/browser/\\1'>\\1</a></td>")
       end
     end
-    table = "<table>"
+    table = '<table class="js-sort-table">'
     rows.each do | row |
       table.concat("<tr>#{row}</tr>")
     end

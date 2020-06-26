@@ -1,2 +1,9 @@
 .idea
+api/.bundle
+api/.rspec
+api/vendor
 api/config.env
+api/coverage
+api/spec
+ui/.bundle
+ui/vendor
