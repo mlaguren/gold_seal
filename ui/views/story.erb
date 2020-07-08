@@ -35,7 +35,57 @@
     <br>
     <span class="card-title">Risk Analysis</span>
     <div>
-      <%= @details['risk_analysis'] %>
+      <table>
+        <thead>
+        <tr>
+          <th>Risk</th>
+          <th>Mitigation</th>
+          <th>Severity</th>
+          <th>Reference</th>
+        </tr>
+        </thead>
+        <tbody>
+          <% @details['risk_analysis'].each do | risk | %>
+          <tr>
+            <td>
+              <% require 'redcarpet'
+                 @markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+              %>
+              <%= @markdown.render(risk['risk']) %>
+            </td>
+            <td>
+              <%= risk['mitigation'] %>
+            </td>
+            <td>
+              <% @cell = ""
+                 if risk['severity'].include?  "LOW"
+                   @cell = '<a class="yellow waves-effect waves-light btn-small">LOW</a>'
+                 elsif risk['severity'].include?  "MEDIUM"
+                   @cell = '<a class="orange waves-effect waves-light btn-small">MEDIUM</a>'
+                 elsif risk['severity'].include?  "HIGH"
+                   @cell = '<a class="orange waves-effect waves-light btn-small">HIGH</a>'
+                 else
+                   @cell ='<a class="blue waves-effect waves-light btn-small">UNDEFINED</a>'
+                 end
+              %>
+              <%= @cell %>
+            </td>
+            <td>
+              <% @reference = ""
+                 if risk['reference'].start_with? "RNBT"
+                   @reference ="<a href='https://projects.mbww.com/browse/#{risk['reference']}'>#{risk['reference']}</a>"
+                 elsif risk['reference'].include? "wiki.mbww.com"
+                   @reference = "<a href='#{risk['reference'].tr('[]','')}'>#{risk['reference'].tr('[]','')}</a>"
+                  else
+                     @reference = "<a class='blue waves-effect waves-light btn-small'>#{risk['reference']}</a>"
+                 end
+              %>
+              <%= @reference %>
+            </td>
+            <% end %>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 

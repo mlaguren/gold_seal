@@ -90,29 +90,31 @@ class ProcessStory
   end
 
   def risk_analysis
-    risk = []
-    project = @key[/(\D.*)-/,1]
+    risks = []
+
     @description.each_line do | line|
       if (line.strip.start_with? "|")
-        risk << line.delete_prefix(' *')
+        risks << line.delete_prefix(' *')
       end
     end
-    rows = []
-    risk.each do | row |
-      if (row.strip.start_with? "||")
-        rows << table_row_processor(row, "<th>","</th>","||")
-      else
-        unlinked_table_row = table_row_processor(row, "<td>","</td>","|")
-        add_wiki_pages = unlinked_table_row.gsub(/\[(https:\/\/#{ENV['CONFLUENCE']}.*)\]/, "<a href=\\1>\\1</a>")
-        rows << add_wiki_pages.gsub(/<td>(#{project}-.*)<\/td>/, "<td><a href='https://projects.mbww.com/browser/\\1'>\\1</a></td>")
+
+    risks.shift
+
+    risk_analysis = []
+    risks.each do | risk |
+      puts risk
+      unless risk.nil?
+        array = risk.split('|')
+        array.reject! { |s| s.nil? || s.strip.empty? }
+        risk_analysis << {
+            "risk":array[0],
+            "mitigation":array[1],
+            "severity":array[2],
+            "reference":array[3]
+        }
       end
     end
-    table = '<table class="js-sort-table">'
-    rows.each do | row |
-      table.concat("<tr>#{row}</tr>")
-    end
-    table.concat("</table>")
-    return table
+    return risk_analysis
   end
 
 end

@@ -3,6 +3,7 @@ source "https://rubygems.org" do
   gem 'httparty'
   gem 'json'
   gem 'puma'
+  gem 'redcarpet'
   gem 'require_all'
   gem 'sinatra'
 end
