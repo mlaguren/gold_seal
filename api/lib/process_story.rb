@@ -98,23 +98,32 @@ class ProcessStory
       end
     end
 
-    risks.shift
+    puts risks.class
+    puts "This is #{risks[0]}"
+    if (risks[0] != "||Risk||Mitigation||Severity||Reference||")
+      puts risks[0].class
+      puts "issue"
+      return "Error:  Risk Analysis Table Does Not Contain The Following Columns:  Risk, Mitigation, Severity, Refence"
+    else
+      puts risks[0].class
+      puts "Test"
+      risks.shift
 
-    risk_analysis = []
-    risks.each do | risk |
-      puts risk
-      unless risk.nil?
-        array = risk.split('|')
-        array.reject! { |s| s.nil? || s.strip.empty? }
-        risk_analysis << {
-            "risk":array[0],
-            "mitigation":array[1],
-            "severity":array[2],
-            "reference":array[3]
-        }
+      risk_analysis = []
+      risks.each do | risk |
+        unless risk.nil?
+          array = risk.split('|')
+          array.reject! { |s| s.nil? || s.strip.empty? }
+          risk_analysis << {
+              "risk":array[0],
+              "mitigation":array[1],
+              "severity":array[2],
+              "reference":array[3]
+          }
+        end
       end
+      return risk_analysis
     end
-    return risk_analysis
   end
 
 end
