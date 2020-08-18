@@ -103,7 +103,7 @@ class ProcessStory
     if (risks[0] != "||Risk||Mitigation||Severity||Reference||")
       puts risks[0].class
       puts "issue"
-      return "Error:  Risk Analysis Table Does Not Contain The Following Columns:  Risk, Mitigation, Severity, Refence"
+      return "Error:  Risk Analysis Table Does Not Contain The Following Columns:  Risk, Mitigation, Severity, Reference"
     else
       puts risks[0].class
       puts "Test"

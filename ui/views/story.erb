@@ -45,16 +45,35 @@
         </tr>
         </thead>
         <tbody>
+        <% if @details['risk_analysis'].class == String %>
+        <tr>
+          <a class="btn-floating btn-large red pulse"><i class="material-icons">error</i></a>
+          <%= @details['risk_analysis'] %>
+        </tr>
+        <% else %>
           <% @details['risk_analysis'].each do | risk | %>
           <tr>
             <td>
               <% require 'redcarpet'
                  @markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true)
+
+                 if risk['risk'].empty?
+                   @assessment = "<a class='blue waves-effect waves-light btn-small'>UNDEFINED</a>"
+                 else
+                   @assessment = @markdown.render(risk['risk'])
+                 end
               %>
-              <%= @markdown.render(risk['risk']) %>
+              <%= @assessment %>
             </td>
             <td>
-              <%= risk['mitigation'] %>
+              <%
+                if risk['risk'].empty?
+                  @risk_mitigation = "<a class='blue waves-effect waves-light btn-small'>UNDEFINED</a>"
+                else
+                  @risk_mitigation = @markdown.render(risk['mitigation'])
+                end
+              %>
+              <%= @risk_mitigation %>
             </td>
             <td>
               <% @cell = ""
@@ -84,6 +103,7 @@
             </td>
             <% end %>
           </tr>
+          <% end %>
         </tbody>
       </table>
     </div>
